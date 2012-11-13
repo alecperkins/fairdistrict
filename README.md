@@ -3,9 +3,11 @@
 This set of scripts recalculates the 2012 Pennsylvania election for House of Representatives using alternative districts. Using the algorithmically derived districts from [B-Districting](http://bdistricting.com/2010/) that are purely population-based, it calculates an outcome of 9 Republican representatives and 9 Democratic representatives. The actual outcome was 13 Rep. and 5 Dem., even though the Democratic candidates received *over 70,000 more votes* as a whole.
 
 The 2012 election looked like this:
+
 ![Image of the 2012 House election in Pennsylvania from NYTimes.com](https://raw.github.com/alecperkins/un-gerrymander/master/images/PA_2012_house_nytimes.png)
 
 When an election using the population-based districting looked like this:
+
 ![Image of votes by census block, according to BDistricting districts](https://raw.github.com/alecperkins/un-gerrymander/master/images/PA_2012_House-bdistricting2010.png)
 
 
