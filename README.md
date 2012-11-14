@@ -95,6 +95,8 @@ The first digit of the tabulation number is the block's [group number](http://en
 
 ## Data Files
 
+A set of files that describing each block, its location, and its district information. Most are downloaded from [census.gov](http://www.census.gov).
+
 ### `42_PA_CD113.txt`
 
 Assigns census blocks to Congressional districts for the 113th Congress.
