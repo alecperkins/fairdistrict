@@ -14,6 +14,8 @@ When an election using the population-based districting looked like this:
 
 ## Usage
 
+(This script requires some familiarity with Python and MongoDB.)
+
 First, install the requirements and prepare the database:
 
 1. `pip install -r requirements.txt`
@@ -62,7 +64,7 @@ As mentioned before, this method ignores the realities of the candidates, and tr
 
 ### Accuracy
 
-Short of getting precinct-level data, one possible method to explore alleviating the accuracy problem would be to distribute the votes by original district as well, and use the difference between the district-level votes and the county-level votes to adjust the votes in each block.
+Short of getting precinct-level data, one possible method to explore alleviating the accuracy problem would be to distribute the votes by original district as well, and use the difference between the district-level votes and the county-level votes to adjust the votes in each block. Also, the Department of State may have more precise data, and is worth contacting.
 
 ### Alternate districts
 
