@@ -68,6 +68,8 @@ Short of getting precinct-level data, one possible method to explore alleviating
 
 Another source of inaccuracy is turnout. Voter turnout in districts safe for one party may be lower. The precinct data has turnout information, so adjusting for turnout in each area may yield different results.
 
+* [Sample precinct data for Allegheny County](http://www.alleghenycounty.us/elect/201211gen/el30.htm)
+
 ### Alternate districts
 
 It would be neat to try this with different districts, such as the RangeVoting Splitline districts. This will require mapping the districts onto the census blocks. This shouldn't be too difficult, since the block groups have coordinate information, and MongoDB supports geospatial queries.
