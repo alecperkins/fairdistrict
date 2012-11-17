@@ -66,6 +66,8 @@ As mentioned before, this method ignores the realities of the candidates, and tr
 
 Short of getting precinct-level data, one possible method to explore alleviating the accuracy problem would be to distribute the votes by original district as well, and use the difference between the district-level votes and the county-level votes to adjust the votes in each block. Also, the Department of State may have more precise data, and is worth contacting.
 
+Another source of inaccuracy is turnout. Voter turnout in districts safe for one party may be lower. The precinct data has turnout information, so adjusting for turnout in each area may yield different results.
+
 ### Alternate districts
 
 It would be neat to try this with different districts, such as the RangeVoting Splitline districts. This will require mapping the districts onto the census blocks. This shouldn't be too difficult, since the block groups have coordinate information, and MongoDB supports geospatial queries.
