@@ -71,9 +71,10 @@ Another source of inaccuracy is turnout. Voter turnout in districts safe for one
 [**Sample precinct data for Allegheny County**](http://www.alleghenycounty.us/elect/201211gen/el30.htm)
 
 Experimenting with some of this data:
-![Image of the 2012 House election in Allegheny County by precinct](https://raw.github.com/alecperkins/un-gerrymander/master/images/PA_Allegheny_county_precincts.png)
 
-([In map form](https://tiles.mapbox.com/alecperkins/map/blocks))
+[![Image of the 2012 House election in Allegheny County by precinct](https://raw.github.com/alecperkins/un-gerrymander/master/images/PA_Allegheny_county_precincts.png)](https://tiles.mapbox.com/alecperkins/map/blocks)
+
+
 
 
 ### Alternate districts
