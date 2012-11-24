@@ -68,7 +68,13 @@ Short of getting precinct-level data, one possible method to explore alleviating
 
 Another source of inaccuracy is turnout. Voter turnout in districts safe for one party may be lower. The precinct data has turnout information, so adjusting for turnout in each area may yield different results.
 
-* [Sample precinct data for Allegheny County](http://www.alleghenycounty.us/elect/201211gen/el30.htm)
+[**Sample precinct data for Allegheny County**](http://www.alleghenycounty.us/elect/201211gen/el30.htm)
+
+Experimenting with some of this data:
+![Image of the 2012 House election in Allegheny County by precinct](https://raw.github.com/alecperkins/un-gerrymander/master/images/PA_Allegheny_county_precincts.png)
+
+([In map form](https://tiles.mapbox.com/alecperkins/map/blocks))
+
 
 ### Alternate districts
 
@@ -82,6 +88,7 @@ It would be even more interesting to see this recalculation on a national level,
 
 The images don't show the district borders. Adding in that sort of information about the districts would be helpful (and goes hand-in-hand with alternate districts that are not census block-based).
 
+[TileMill](http://mapbox.com/tilemill/) is really helpful for this sort of thing.
 
 
 ## Census Blocks
@@ -175,9 +182,12 @@ Generated from county vote information scraped from the Pennsylvania [election r
 ## More information
 
 * [Census products](http://www.census.gov/population/www/cen2010/glance/index.html)
-* [TIGER shapes](http://www.census.gov/geo/www/tiger/tgrshp2010/tgrshp2010.html) ([ftp](ftp://ftp2.census.gov/geo/pvs/tiger2010st/42_Pennsylvania/))
+* [TIGER shapes](http://www.census.gov/geo/www/tiger/tgrshp2010/tgrshp2010.html) ([ftp - organized by county](ftp://ftp2.census.gov/geo/pvs/tiger2010st/42_Pennsylvania/))
 * [Census Block assignment files](https://www.census.gov/geo/www/2010census/baf/baf_main.html)
-
+* [TileMill](http://mapbox.com/tilemill/) - for making visualizations
+* [pyshp](http://code.google.com/p/pyshp/) - Python shapefile library
+* [Kartograph](http://kartograph.org/) - Python and JavaScript mapping libraries
+* [Using MongoDB to store geographic data](http://www.paolocorti.net/2009/12/06/using-mongodb-to-store-geographic-data/)
 
 
 ## Authors
