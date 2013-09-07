@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Un-gerrymander by alecperkins</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Un-gerrymander</h1>
+          <h2></h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/alecperkins/un-gerrymander/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/alecperkins/un-gerrymander/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/alecperkins/un-gerrymander" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <p>This set of scripts recalculates the 2012 Pennsylvania election for House of Representatives using alternative districts. Using the algorithmically derived districts from <a href="http://bdistricting.com/2010/">B-Districting</a> that are purely population-based, it calculates an outcome of 9 Republican representatives and 9 Democratic representatives. The actual outcome was 13 Rep. and 5 Dem., even though the Democratic candidates received <em>over 70,000 more votes</em> as a whole.</p>
+
+<p>The 2012 election looked like this:</p>
+
+<p><img src="https://raw.github.com/alecperkins/un-gerrymander/master/images/PA_2012_house_nytimes.png" alt="Image of the 2012 House election in Pennsylvania from NYTimes.com"></p>
+
+<p>When an election using the population-based districting looked like this:</p>
+
+<p><img src="https://raw.github.com/alecperkins/un-gerrymander/master/images/PA_2012_House-bdistricting2010.png" alt="Image of votes by census block, according to BDistricting districts"></p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>(This script requires some familiarity with Python and MongoDB.)</p>
+
+<p>First, install the requirements and prepare the database:</p>
+
+<ol>
+<li><code>pip install -r requirements.txt</code></li>
+<li>Start an instance of <a href="http://www.mongodb.org/">MongoDB</a>, which stores the processed data</li>
+</ol><p>Then, load and process the data:</p>
+
+<ol>
+<li>Unzip <code>data.zip</code>, unpacking the <code>/data</code> directory</li>
+<li>Run <code>python load.py</code> to load the data from <code>/data</code> into the database</li>
+<li>Run <code>python compute.py</code> to execute various manipulations of the data, including distributing the votes to the blocks</li>
+</ol><p>Next, generate some visualizations with <code>python visualize.py</code>. This will create images of votes, like the one above. It also will calculate and display the results of an election using the alternate districts.</p>
+
+<h2>
+<a name="about" class="anchor" href="#about"><span class="octicon octicon-link"></span></a>About</h2>
+
+<h3>
+<a name="why" class="anchor" href="#why"><span class="octicon octicon-link"></span></a>Why</h3>
+
+<p>In the 2012 general election for House of Representatives, voters in Pennsylvania cast 2,722,560 votes for Democratic party candidates, and 2,651,901  for Republican party candidates. However, the end result in representation was 13 Republican representatives to 5 Democratic representatives. The <a href="http://www.ballot-access.org/2012/11/12/only-four-u-s-house-elections-in-the-last-hundred-years-gave-one-party-a-house-majority-even-though-the-other-major-party-polled-more-votes-for-u-s-house/">national picture</a> wasn't much different.</p>
+
+<p>Pennsylvania, like <a href="http://rangevoting.org/GerryGal.html">many states</a>, has some funny looking districts. The cause is generally <a href="http://en.wikipedia.org/wiki/Gerrymandering">gerrymandering</a>, the practice of manipulating district shapes to achieve an electoral outcome. The question is, how much does this manipulation impact the representation? The disconnect between overall party votes and elected representative parties suggests quite a bit.</p>
+
+<p>There are several projects that attempt redistricting using algorithmic, automated approaches that are purely population based, instead of the manual, corruptable approaches currently used.</p>
+
+<ul>
+<li><a href="http://bdistricting.com/2010/">B-Districting</a></li>
+<li><a href="http://rangevoting.org/SplitLR.html">RangeVoting Splitline districts</a></li>
+</ul><p>There are also some neat tools for exploring redistricting, like  <a href="http://www.districtbuilder.org/">District Builder</a>.</p>
+
+<p>Because voting tends to be regional, the factor that makes gerrymandering possible, the way to measure the effect of gerrymandering, and redistricting in different ways, is proportion of elected parties to votes. The goal isn't proportional representation, but rather reducing the bias toward a particular political party based on deliberately manipulated district shapes.</p>
+
+<h3>
+<a name="how" class="anchor" href="#how"><span class="octicon octicon-link"></span></a>How</h3>
+
+<p>Take votes to each party by county, distribute those votes to the census blocks that make up the county by their share of the population, then recalculate the elections using districts calculated by <a href="http://bdistricting.com">bdistricting.com</a>.</p>
+
+<p>The assumption is that people in one block would vote for the same party if the block is moved to a new district (and new contest with different candidates). There are definitely cases where people vote for the candidate against the party. Scraping the vote data from the state website pulled votes for all contests, and a few counties did vote differently for president versus house, in terms of party. However, this difference was minimal.</p>
+
+<h3>
+<a name="flaws" class="anchor" href="#flaws"><span class="octicon octicon-link"></span></a>Flaws</h3>
+
+<p>As mentioned before, this method ignores the realities of the candidates, and treats votes as for parties, not candidates. It also is not completely accurate, as the most precise vote information used is county-level. Recalculating the election using current districts gets two close contests wrong (but just barely). Block-level would be ideal, but is impossible to get. Precinct-level, which is then distributed to blocks, is the next best thing, but compiling and structuring all that data is a daunting challenge. County websites are miserable, and the precinct data, if at all available, is not provided in a standard format.</p>
+
+<h2>
+<a name="todos" class="anchor" href="#todos"><span class="octicon octicon-link"></span></a>TODOs</h2>
+
+<h3>
+<a name="accuracy" class="anchor" href="#accuracy"><span class="octicon octicon-link"></span></a>Accuracy</h3>
+
+<p>Short of getting precinct-level data, one possible method to explore alleviating the accuracy problem would be to distribute the votes by original district as well, and use the difference between the district-level votes and the county-level votes to adjust the votes in each block. The Department of State will have the more precise data available as early as January (by CD for 10$ — how quaint).</p>
+
+<p>Another source of inaccuracy is turnout. Voter turnout in districts safe for one party may be lower. The precinct data has turnout information, so adjusting for turnout in each area may yield different results.</p>
+
+<p><a href="http://www.alleghenycounty.us/elect/201211gen/el30.htm"><strong>Sample precinct data for Allegheny County</strong></a></p>
+
+<p>Experimenting with some of this data:</p>
+
+<p><a href="https://tiles.mapbox.com/alecperkins/map/blocks"><img src="https://raw.github.com/alecperkins/un-gerrymander/master/images/PA_Allegheny_county_precincts.png" alt="Image of the 2012 House election in Allegheny County by precinct"></a></p>
+
+<h3>
+<a name="alternate-districts" class="anchor" href="#alternate-districts"><span class="octicon octicon-link"></span></a>Alternate districts</h3>
+
+<p>It would be neat to try this with different districts, such as the RangeVoting Splitline districts. This will require mapping the districts onto the census blocks. This shouldn't be too difficult, since the block groups have coordinate information, and MongoDB supports geospatial queries.</p>
+
+<h3>
+<a name="country-wide" class="anchor" href="#country-wide"><span class="octicon octicon-link"></span></a>Country-wide</h3>
+
+<p>It would be even more interesting to see this recalculation on a national level, since Pennsylvania is hardly alone in gerrymandered districts. This requires getting vote data on a county level.</p>
+
+<h3>
+<a name="improved-visualization" class="anchor" href="#improved-visualization"><span class="octicon octicon-link"></span></a>Improved visualization</h3>
+
+<p>The images don't show the district borders. Adding in that sort of information about the districts would be helpful (and goes hand-in-hand with alternate districts that are not census block-based).</p>
+
+<p><a href="http://mapbox.com/tilemill/">TileMill</a> is really helpful for this sort of thing.</p>
+
+<h2>
+<a name="census-blocks" class="anchor" href="#census-blocks"><span class="octicon octicon-link"></span></a>Census Blocks</h2>
+
+<p><a href="http://en.wikipedia.org/wiki/Census_block">Blocks</a> are identified using a 15-digit number, looking something like <code>420010301011000</code>.</p>
+
+<p>Format: <code>AABBBCCCCCCDDDD</code></p>
+
+<ul>
+<li>AA - state <a href="http://en.wikipedia.org/wiki/Federal_Information_Processing_Standard_state_code">FIPS</a>
+</li>
+<li>BBB - county <a href="http://en.wikipedia.org/wiki/FIPS_county_code">FIPS</a>
+</li>
+<li>CCCCCC - <a href="http://en.wikipedia.org/wiki/Census_tract">tract</a>
+</li>
+<li>DDDD - tabulation number</li>
+</ul><p>The first digit of the tabulation number is the block's <a href="http://en.wikipedia.org/wiki/Census_block_group">group number</a>. The block with ID <code>42001030101100</code> has a group number <code>1</code> and is in block group <code>42001030101</code>.</p>
+
+<h2>
+<a name="data-files" class="anchor" href="#data-files"><span class="octicon octicon-link"></span></a>Data Files</h2>
+
+<p>A set of files that describing each block, its location, and its district information. Most are downloaded from <a href="http://www.census.gov">census.gov</a>.</p>
+
+<h3>
+<a name="42_pa_cd113txt" class="anchor" href="#42_pa_cd113txt"><span class="octicon octicon-link"></span></a><code>42_PA_CD113.txt</code>
+</h3>
+
+<p>Assigns census blocks to Congressional districts for the 113th Congress.</p>
+
+<pre><code>BLOCKID,CD113
+420010301011000,04
+420010301011001,04
+…
+</code></pre>
+
+<h3>
+<a name="cenpop2012_mean_bg42txt" class="anchor" href="#cenpop2012_mean_bg42txt"><span class="octicon octicon-link"></span></a><code>CenPop2012_Mean_BG42.txt</code>
+</h3>
+
+<p>Lists the census block groups, their populations, and centers in latitude and longitude. Groups are identified using a number that's the same as the blocks, but with the group number instead of the tabulation number.</p>
+
+<pre><code>STATEFP,COUNTYFP,TRACTCE,BLKGRPCE,POPULATION,LATITUDE,LONGITUDE
+42,001,030101,1,2580,+40.015805,-077.081172
+42,001,030102,1,1136,+39.940818,-076.995904
+…
+</code></pre>
+
+<h3>
+<a name="pa_congresscsv" class="anchor" href="#pa_congresscsv"><span class="octicon octicon-link"></span></a><code>PA_Congress.csv</code>
+</h3>
+
+<p>The B-Districting districts, assigned to census blocks.</p>
+
+<pre><code>420010308003003,9
+420010308003004,9
+…
+</code></pre>
+
+<p>Downloaded from <a href="http://bdistricting.com/2010/PA_Congress/">here</a>.</p>
+
+<h3>
+<a name="pa_county_fipscsv" class="anchor" href="#pa_county_fipscsv"><span class="octicon octicon-link"></span></a><code>PA_county_fips.csv</code>
+</h3>
+
+<p>A list of Pennsylvania counties and their corresponding <a href="http://en.wikipedia.org/wiki/FIPS_county_code">FIPS code</a>.</p>
+
+<pre><code>Adams,001
+Allegheny,003
+…
+</code></pre>
+
+<h3>
+<a name="2012_pa_county_datajson" class="anchor" href="#2012_pa_county_datajson"><span class="octicon octicon-link"></span></a><code>2012_PA_county_data.json</code>
+</h3>
+
+<p>Generated from county vote information scraped from the Pennsylvania <a href="http://www.electionreturns.state.pa.us/ElectionsInformation.aspx">election returns site</a>.</p>
+
+<pre><code>[
+    {
+        "raw": {…},             # The raw data from the site, by contests.
+        "votes": {              # The votes organized by party.
+            "senate": {
+                "rep": 25209,
+                "dem": 15582
+            },
+            "president": {
+                "rep": 26490,
+                "dem": 14893
+            },
+            "house": {
+                "rep": 27142,
+                "dem": 11955
+            }
+        },
+        "fips": "001",
+        "id": 1,
+        "name": "Adams"
+    },
+    …
+]
+</code></pre>
+
+<h2>
+<a name="more-information" class="anchor" href="#more-information"><span class="octicon octicon-link"></span></a>More information</h2>
+
+<ul>
+<li><a href="http://www.census.gov/population/www/cen2010/glance/index.html">Census products</a></li>
+<li>
+<a href="http://www.census.gov/geo/www/tiger/tgrshp2010/tgrshp2010.html">TIGER shapes</a> (<a>ftp - organized by county</a>)</li>
+<li><a href="https://www.census.gov/geo/www/2010census/baf/baf_main.html">Census Block assignment files</a></li>
+<li>
+<a href="http://mapbox.com/tilemill/">TileMill</a> - for making visualizations</li>
+<li>
+<a href="http://code.google.com/p/pyshp/">pyshp</a> - Python shapefile library</li>
+<li>
+<a href="http://kartograph.org/">Kartograph</a> - Python and JavaScript mapping libraries</li>
+<li><a href="http://www.paolocorti.net/2009/12/06/using-mongodb-to-store-geographic-data/">Using MongoDB to store geographic data</a></li>
+</ul><h2>
+<a name="authors" class="anchor" href="#authors"><span class="octicon octicon-link"></span></a>Authors</h2>
+
+<ul>
+<li><a href="http://github.com/alecperkins">Alec Perkins</a></li>
+</ul><h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>Unlicensed aka Public Domain. See <a href="https://github.com/alecperkins/un-gerrymander/blob/master/UNLICENSE">/UNLICENSE</a> for more information.</p>
+        </section>
+
+        <footer>
+          Un-gerrymander is maintained by <a href="https://github.com/alecperkins">alecperkins</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
